@@ -45,8 +45,14 @@ class Project
 
     public function __construct()
     {
+        $this->createdAt = new \DateTimeImmutable();
         $this->tasks = new ArrayCollection();
         $this->media = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int

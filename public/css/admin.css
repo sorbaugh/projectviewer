@@ -1,0 +1,12 @@
+:root {
+    --sidebar-bg: #0693e3;
+    --sidebar-menu-color: #fff;
+    --sidebar-logo-color: #fff;
+    --sidebar-menu-icon-color: #fff;
+    --sidebar-menu-active-item-color: #000;
+    --sidebar-menu-active-item-bg: #fff;
+    --pagination-active-bg: #0693e3;
+    --font-family-base: "M PLUS 1", "Open Sans", sans-serif;
+    --button-primary-bg: #0693e3;
+    --form-switch-checked-bg: #0693e3;
+}

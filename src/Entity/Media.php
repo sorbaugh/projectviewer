@@ -19,8 +19,8 @@ class Media
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::BLOB)]
-    private $file = null;
+    #[ORM\Column(length: 255)]
+    private ?string $file = null;
 
     #[ORM\ManyToMany(targetEntity: TaskHistory::class, mappedBy: 'media')]
     private Collection $taskHistories;
@@ -59,7 +59,7 @@ class Media
         return $this;
     }
 
-    public function getFile()
+    public function getFile(): ?string
     {
         return $this->file;
     }

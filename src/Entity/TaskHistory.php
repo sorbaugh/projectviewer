@@ -29,7 +29,13 @@ class TaskHistory
 
     public function __construct()
     {
+        $this->createdAt = new \DateTimeImmutable();
         $this->media = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getDescription();
     }
 
     public function getId(): ?int

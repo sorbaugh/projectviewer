@@ -26,7 +26,7 @@ class Task
     private ?string $documentation = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Project $project = null;
 
     #[ORM\Column]
@@ -61,12 +61,18 @@ class Task
 
     public function __construct()
     {
+        $this->createdAt = new \DateTimeImmutable();
         $this->contributors = new ArrayCollection();
         $this->taskDependancies = new ArrayCollection();
         $this->dependencyTasks = new ArrayCollection();
         $this->taskHistories = new ArrayCollection();
         $this->media = new ArrayCollection();
         $this->blockers = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int

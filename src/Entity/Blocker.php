@@ -26,6 +26,11 @@ class Blocker
     #[ORM\JoinColumn(nullable: false)]
     private ?Task $task = null;
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
