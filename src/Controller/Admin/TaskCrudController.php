@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Task;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -20,8 +21,16 @@ class TaskCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            DateField::new('createdAt')->hideOnForm()->setFormat('dd MMM. y hh:mm'),
-            DateField::new('updatedAt')->onlyOnForms()->setFormat('dd MMM. y hh:mm'),
+            DateField::new('createdAt')
+                ->hideOnForm()
+                ->setFormat('dd MMM. y hh:mm'),
+            DateField::new('updatedAt', 'Last Updated At')
+                ->hideOnForm()
+                ->setFormat('dd MMM. y hh:mm')
+                ->setFormTypeOption(
+                    'disabled',
+                    $pageName != Crud::PAGE_NEW
+                ),
             TextField::new('name'),
             TextEditorField::new('description'),
             DateField::new('dueDate'),

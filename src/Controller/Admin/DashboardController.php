@@ -58,7 +58,7 @@ class DashboardController extends AbstractDashboardController
         //yield MenuItem::linkToCrud('Media', 'fas fa-list', Media::class);
         yield MenuItem::linkToCrud('Task History', 'fas fa-timeline', TaskHistory::class);
         //yield MenuItem::linkToCrud('Contributions', 'fas fa-list', Contribution::class);
-        yield MenuItem::linkToCrud('Blocker', 'fas fa-house-fire', Blocker::class);
+        yield MenuItem::linkToCrud('Blockers', 'fas fa-house-fire', Blocker::class);
     }
 
     public function configureActions(): Actions

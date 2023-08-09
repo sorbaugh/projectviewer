@@ -1,27 +1,20 @@
 <?php
 
-use Doctrine\Common\EventSubscriber;
+// src/EventListener/SearchIndexer.php
+namespace App\EventListener;
+
+use App\Entity\Project;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
-use App\Entity\Task;
 
-class EntityUpdateListenerAAAAA implements EventSubscriber
+#[AsDoctrineListener(event: Events::preUpdate, priority: 500, connection: 'default')]
+class EntityUpdateListener
 {
-    public function getSubscribedEvents()
+    // the listener methods receive an argument which gives you access to
+    // both the entity object of the event and the entity manager itself
+    public function preUpdate(PreUpdateEventArgs $args): void
     {
-        return [
-            Events::preUpdate,
-        ];
-    }
 
-    public function preUpdate(LifecycleEventArgs $args)
-    {
-        $entity = $args->getObject();
-
-        if ($entity instanceof Task) {
-            $entityManager = $args->getObjectManager();
-            $entity->setUpdatedAt(new \DateTimeImmutable());
-            $entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet($entityManager->getClassMetadata(YourEntity::class), $entity);
-        }
     }
 }

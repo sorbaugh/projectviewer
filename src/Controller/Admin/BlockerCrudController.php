@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Blocker;
 use App\Entity\TaskHistory;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -24,6 +25,10 @@ class BlockerCrudController extends AbstractCrudController
             BooleanField::new('isResolved'),
             AssociationField::new('task', 'Blocked Task')
                 ->autocomplete()
+                ->setFormTypeOption(
+                    'disabled',
+                    $pageName != Crud::PAGE_NEW
+                )
                 ->formatValue(static function($value, Blocker $blocker) {
                     if (!$task = $blocker->getTask()) {
                         return null;

@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Task;
 use App\Entity\TaskHistory;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -22,9 +23,15 @@ class TaskHistoryCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            DateField::new('createdAt')->hideOnForm()->setFormat('dd MMM. y hh:mm'),
+            DateField::new('createdAt')
+                ->hideOnForm()
+                ->setFormat('dd MMM. y hh:mm'),
             AssociationField::new('task')
                 ->autocomplete()
+                ->setFormTypeOption(
+                    'disabled',
+                    $pageName != Crud::PAGE_NEW
+                )
                 ->formatValue(static function($value, TaskHistory $taskHistory) {
                     if (!$task = $taskHistory->getTask()) {
                         return null;
