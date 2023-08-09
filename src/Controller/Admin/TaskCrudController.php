@@ -18,6 +18,18 @@ class TaskCrudController extends AbstractCrudController
         return Task::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return parent::configureCrud($crud)
+            ->setDefaultSort([
+                'isFinished' => 'ASC',
+                'project.createdAt' => 'DESC',
+                'id' => 'DESC'
+            ])
+            ->showEntityActionsInlined();
+    }
+
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -32,7 +44,8 @@ class TaskCrudController extends AbstractCrudController
                     $pageName != Crud::PAGE_NEW
                 ),
             TextField::new('name'),
-            TextEditorField::new('description'),
+            TextEditorField::new('description')
+                ->setSortable(false),
             DateField::new('dueDate'),
             AssociationField::new('project')
                 ->setRequired(false)
