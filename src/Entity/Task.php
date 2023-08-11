@@ -51,7 +51,7 @@ class Task
     #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'taskDependancies')]
     private Collection $dependencyTasks;
 
-    #[ORM\OneToMany(mappedBy: 'task', targetEntity: TaskHistory::class)]
+    #[ORM\OneToMany(mappedBy: 'task', targetEntity: TaskHistory::class, cascade: ['persist'])]
     private Collection $taskHistories;
 
     #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'tasks')]
@@ -59,6 +59,9 @@ class Task
 
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: Blocker::class, orphanRemoval: true)]
     private Collection $blockers;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $currentNote = null;
 
     public function __construct()
     {
@@ -342,6 +345,18 @@ class Task
                 $blocker->setTask(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCurrentNote(): ?string
+    {
+        return $this->currentNote;
+    }
+
+    public function setCurrentNote(?string $currentNote): static
+    {
+        $this->currentNote = $currentNote;
 
         return $this;
     }

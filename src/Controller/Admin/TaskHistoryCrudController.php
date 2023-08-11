@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Task;
 use App\Entity\TaskHistory;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -18,6 +20,25 @@ class TaskHistoryCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return TaskHistory::class;
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return parent::configureCrud($crud)
+            ->setPageTitle(Crud::PAGE_INDEX, 'History Log')
+            ->setDefaultSort([
+                'createdAt' => 'DESC',
+            ]);
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return parent::configureActions($actions
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->disable(Crud::PAGE_NEW)
+            ->disable(Crud::PAGE_EDIT)
+            ->disable(Crud::PAGE_DETAIL)
+        );
     }
 
 
@@ -40,7 +61,7 @@ class TaskHistoryCrudController extends AbstractCrudController
 
                     return sprintf('%s&nbsp;(%s)', $task->getName(), $task->getTaskHistories()->count());
                 }),
-            TextareaField::new('description')
+            TextareaField::new('description')->renderAsHtml()
 
         ];
     }

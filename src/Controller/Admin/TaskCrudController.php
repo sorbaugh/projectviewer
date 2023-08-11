@@ -29,7 +29,6 @@ class TaskCrudController extends AbstractCrudController
         return parent::configureCrud($crud)
             ->setDefaultSort([
                 'isFinished' => 'ASC',
-                'project.createdAt' => 'DESC',
                 'id' => 'DESC'
             ])
             ->showEntityActionsInlined();
@@ -53,6 +52,9 @@ class TaskCrudController extends AbstractCrudController
             TextField::new('name'),
             TextEditorField::new('description')
                 ->setSortable(false),
+            TextEditorField::new('currentNote')
+                ->setLabel('Log')
+                ->setSortable(false),
             DateField::new('dueDate'),
             AssociationField::new('project')
                 ->setRequired(false)
@@ -64,7 +66,7 @@ class TaskCrudController extends AbstractCrudController
 
                     return sprintf('%s&nbsp;(%s)', $project->getName(), $project->getTasks()->count());
                 }),
-            AssociationField::new('taskHistories')->setLabel('Task History Entries'),
+            AssociationField::new('taskHistories')->setLabel('Log Entries'),
             AssociationField::new('blockers'),
             BooleanField::new('isFinished')->renderAsSwitch(),
         ];
