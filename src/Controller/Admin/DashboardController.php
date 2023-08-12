@@ -33,22 +33,6 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        //return parent::index();
-
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
-
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirect('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
         return $this->render('admin/index.html.twig', [
             'chart' => $this->createChart(),
         ]);
@@ -63,13 +47,17 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::section();
+        yield MenuItem::subMenu('Projects', 'fas fa-folder-tree')
+            ->setSubItems([
+                MenuItem::linkToCrud('Project Overview', 'fas fa-folder-tree', Project::class),
+                MenuItem::linkToCrud('Tasks', 'fas fa-list-check', Task::class),
+                MenuItem::linkToCrud('History Log', 'fas fa-timeline', TaskHistory::class),
+                MenuItem::linkToCrud('Blockers', 'fas fa-warning', Blocker::class)
+            ]);
         yield MenuItem::linkToCrud('Contributors', 'fas fa-user', Contributor::class);
-        yield MenuItem::linkToCrud('Projects', 'fas fa-folder-tree', Project::class);
-        yield MenuItem::linkToCrud('Tasks', 'fas fa-list-check', Task::class);
         //yield MenuItem::linkToCrud('Media', 'fas fa-list', Media::class);
-        yield MenuItem::linkToCrud('History Log', 'fas fa-timeline', TaskHistory::class);
         //yield MenuItem::linkToCrud('Contributions', 'fas fa-list', Contribution::class);
-        yield MenuItem::linkToCrud('Blockers', 'fas fa-house-fire', Blocker::class);
     }
 
     public function configureActions(): Actions
