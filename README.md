@@ -25,30 +25,52 @@ Follow these steps to set up and run the Project Viewer application:
    cd projectviewer
    
 2. Create Containers:
-   Run the following command in the project's root directory to create Docker containers:
+   Make sure that Docker-Desktop is up and running and run the following command in the project's root directory to create Docker containers:
    ```sh
    docker-compose up -d
 
-3. Install PHP Dependencies:
-   Change to the /var/www directory inside the Docker container:
+3. Connect into the docker container and install PHP dependencies:
    ```sh
-   docker exec -ti teamviewer-php_symfony_app-1 /bin/bash
+   docker exec -ti projectviewer-php_symfony_app-1 /bin/bash
+   ```
+
+4. Change to the /var/www directory inside the Docker container:
+   ```sh
    cd /var/www
    ```
-   
-   Then install PHP dependencies using Composer:
+
+5. Then install PHP dependencies using Composer:
    ```sh
    composer install
    ```
    
-   Install Front-End Dependencies:
+6. Install Front-End Dependencies:
    Still in the /var/www directory inside the Docker container, install front-end dependencies using npm:
    ```sh
    npm install
    ```
+   
+7. Build the assets:
+   ```sh
+   npm run build
+   ```
+   
+8. Create the database:
+   ```sh
+   php bin/console doctrine:database:create
+   ```
+   
+9. Execute doctrine migration (type "yes" when prompted)
+   ```sh
+   php bin/console doctrine:migrations:migrate
+   ```
 
 ## Access the Application
+You're done!
+
 Open your web browser and navigate to http://localhost:9000 to access the Project Viewer application.
+
+You can also navigate to http://localhost:5050 to access pgadmin.
 
 ## Usage
 Use the Project Viewer application to manage and view your projects efficiently. Explore the features provided by Doctrine, EasyAdmin, and Webpack Encore to streamline your workflow.
