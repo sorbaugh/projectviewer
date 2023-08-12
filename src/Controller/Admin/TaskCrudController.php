@@ -49,13 +49,6 @@ class TaskCrudController extends AbstractCrudController
                     'disabled',
                     $pageName != Crud::PAGE_NEW
                 ),
-            TextField::new('name'),
-            TextEditorField::new('description')
-                ->setSortable(false),
-            TextEditorField::new('currentNote')
-                ->setLabel('Log')
-                ->setSortable(false),
-            DateField::new('dueDate'),
             AssociationField::new('project')
                 ->setRequired(false)
                 ->autocomplete()
@@ -66,7 +59,19 @@ class TaskCrudController extends AbstractCrudController
 
                     return sprintf('%s&nbsp;(%s)', $project->getName(), $project->getTasks()->count());
                 }),
-            AssociationField::new('taskHistories')->setLabel('Log Entries'),
+            TextField::new('name'),
+            TextEditorField::new('description')
+                ->setSortable(false)
+                ->hideOnIndex(),
+            TextEditorField::new('currentNote')
+                ->setLabel('Log')
+                ->setSortable(false)
+                ->hideOnIndex(),
+            DateField::new('dueDate'),
+            AssociationField::new('taskHistories')
+                ->setLabel('Log Entries')
+                ->setTemplatePath('admin/field/task_log_listing.html.twig')
+                ->hideOnForm(),
             AssociationField::new('blockers'),
             BooleanField::new('isFinished')->renderAsSwitch(),
         ];

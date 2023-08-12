@@ -1,0 +1,14 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{# this template is used to display Task Log entries #}
+
+{% if ea.crud.currentAction == 'detail' %}
+    {% for logEntry in field.value %}
+        {{ logEntry.description|raw }}
+    {% endfor %}
+{% else %}
+    <span class="badge badge-secondary">{{ field.formattedValue }}</span>
+{% endif %}
+
+

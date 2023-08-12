@@ -7,6 +7,7 @@ use App\Entity\TaskHistory;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -14,6 +15,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\DateTimeFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 
 class TaskHistoryCrudController extends AbstractCrudController
 {
@@ -64,5 +67,12 @@ class TaskHistoryCrudController extends AbstractCrudController
             TextareaField::new('description')->renderAsHtml()
 
         ];
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return parent::configureFilters($filters)
+            ->add(DateTimeFilter::new('createdAt'))
+            ->add(EntityFilter::new('task'));
     }
 }
