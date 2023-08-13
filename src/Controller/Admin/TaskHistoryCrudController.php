@@ -4,10 +4,12 @@ namespace App\Controller\Admin;
 
 use App\Entity\Task;
 use App\Entity\TaskHistory;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -36,11 +38,20 @@ class TaskHistoryCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $reportAction = Action::new('report', 'Download Report')
+            ->linkToCrudAction('reportHistory')
+            //->addCssClass('btn btn-success')
+            ->setIcon('fa fa-file-arrow-down')
+            ->setTemplatePath('admin/action/history_report_action.html.twig')
+            ->displayAsButton()
+            ->createAsGlobalAction()
+        ;
         return parent::configureActions($actions
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->disable(Crud::PAGE_NEW)
             ->disable(Crud::PAGE_EDIT)
             ->disable(Crud::PAGE_DETAIL)
+            ->add(Crud::PAGE_INDEX, $reportAction)
         );
     }
 
@@ -74,5 +85,13 @@ class TaskHistoryCrudController extends AbstractCrudController
         return parent::configureFilters($filters)
             ->add(DateTimeFilter::new('createdAt'))
             ->add(EntityFilter::new('task'));
+    }
+
+    public function reportHistory(AdminContext $adminContext, EntityManagerInterface $entityManager)
+    {
+        $repository = $entityManager->getRepository(TaskHistory::class);
+        $fullHistory = $repository->findAll();
+
+        return $this->json(['history-entries' => count($fullHistory)]);
     }
 }

@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -24,6 +25,7 @@ class ProjectCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            FormField::addTab('Basic Data'),
             IdField::new('id')->onlyOnIndex(),
             DateField::new('createdAt')
                 ->hideOnForm()
@@ -35,12 +37,15 @@ class ProjectCrudController extends AbstractCrudController
                     'disabled',
                     $pageName != Crud::PAGE_NEW
                 ),
-            TextField::new('name'),
-            TextEditorField::new('description'),
+            TextField::new('name')
+                ->setColumns(8),
+            TextEditorField::new('description')
+                ->setColumns(8),
             DateField::new('dueDate'),
+            BooleanField::new('isFinished')->renderAsSwitch(false),
+            FormField::addTab('Tasks'),
             AssociationField::new('tasks')
                 ->setFormTypeOption('choice_label', 'name'),
-            BooleanField::new('isFinished')->renderAsSwitch(false),
         ];
     }
 

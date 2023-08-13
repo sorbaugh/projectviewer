@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -38,6 +39,7 @@ class TaskCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            FormField::addTab('Basic Data'),
             IdField::new('id')->onlyOnIndex(),
             DateField::new('createdAt')
                 ->hideOnForm()
@@ -59,7 +61,8 @@ class TaskCrudController extends AbstractCrudController
 
                     return sprintf('%s&nbsp;(%s)', $project->getName(), $project->getTasks()->count());
                 }),
-            TextField::new('name'),
+            TextField::new('name')
+                ->setColumns(6),
             TextEditorField::new('description')
                 ->setSortable(false)
                 ->hideOnIndex(),
@@ -68,12 +71,14 @@ class TaskCrudController extends AbstractCrudController
                 ->setSortable(false)
                 ->hideOnIndex(),
             DateField::new('dueDate'),
+            BooleanField::new('isFinished')->renderAsSwitch(),
+            FormField::addTab('Log'),
             AssociationField::new('taskHistories')
                 ->setLabel('Log Entries')
                 ->setTemplatePath('admin/field/task_log_listing.html.twig')
                 ->hideOnForm(),
+            FormField::addTab('Blockers'),
             AssociationField::new('blockers'),
-            BooleanField::new('isFinished')->renderAsSwitch(),
         ];
     }
 
